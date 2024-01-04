@@ -21,6 +21,24 @@ namespace MultiShop.DAL
             modelBuilder.ApplyConfigurationsFromAssembly(Assembly.GetExecutingAssembly());
             base.OnModelCreating(modelBuilder);
         }
+        public override Task<int> SaveChangesAsync(CancellationToken cancellationToken = default)
+        {
+            var entities = ChangeTracker.Entries<BaseEntity>();
+            foreach (var data in entities)
+            {
+                switch (data.State)
+                {
+                    case EntityState.Added:
+                        data.Entity.CreatedAt = DateTime.UtcNow;
+                        data.Entity.CreatedBy = "Nicat";
+                        break;
+                    case EntityState.Modified:
+                        data.Entity.LastUpdatedAt = DateTime.UtcNow;
+                        break;
+                }
+            }
+            return base.SaveChangesAsync(cancellationToken);
+        }
 
 
     }
