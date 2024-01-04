@@ -19,6 +19,9 @@
 
   <ItemGroup>
     <Folder Include="wwwroot\uploads\category\" />
+    <Folder Include="wwwroot\uploads\product\main\" />
+    <Folder Include="wwwroot\uploads\product\hover\" />
+    <Folder Include="wwwroot\uploads\product\other\" />
     <Folder Include="wwwroot\uploads\slide\" />
   </ItemGroup>
 

@@ -71,7 +71,7 @@
                             </li>
                             
                         }
-                        <li class="page-item @(Model.TotalPages < Model.CurrentPage ? "disabled" : "")">
+                        <li class="page-item @(Model.TotalPages <= Model.CurrentPage ? "disabled" : "")">
                             <a class="page-link" asp-controller="category" asp-action="index" asp-route-page="@(Model.CurrentPage+1)" aria-label="Next">
                                 <span aria-hidden="true">&raquo;</span>
                                 <span class="sr-only">Next</span>

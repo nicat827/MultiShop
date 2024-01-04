@@ -1,7 +1,5 @@
-﻿@model PaginationVM<SlideGetItemVM>
+﻿@model PaginationVM<ProductGetItemVM>
 @{
-    Console.WriteLine(Model.TotalPages);
-    Console.WriteLine(Model.CurrentPage);
     int count = (Model.CurrentPage - 1) * 5;
 
 }
@@ -9,8 +7,8 @@
     <div class="col-lg-12 grid-margin stretch-card">
         <div class="card">
             <div class="card-body">
-                <h4 class="card-title">Slides Table</h4>
-                <a asp-controller="slide" asp-action="create" class="btn btn-primary mb-3">Create Slide</a>
+                <h4 class="card-title">Products Table</h4>
+                <a asp-controller="product" asp-action="create" class="btn btn-primary mb-3">Create Product</a>
                 <div class="table-responsive">
                     <table class="table table-striped">
                         <thead>
@@ -25,15 +23,16 @@
                                     Name
                                 </th>
                                 <th>
-                                    Order
+                                    Sale Price
                                 </th>
+
                                 <th>
                                     Settings
                                 </th>
                             </tr>
                         </thead>
                         <tbody>
-                            @foreach (var slide in Model.Items)
+                            @foreach (var product in Model.Items)
                             {
                                 count++;
                                 <tr>
@@ -42,18 +41,18 @@
                                         @count
                                     </td>
                                     <td>
-                                        <img style="width:100px; height:100px" src="~/uploads/slide/@slide.ImageUrl" />
+                                        <img style="width:100px; height:100px" src="~/uploads/product/main/@product.Images[0].ImageUrl" />
                                     </td>
                                     <td>
-                                        @slide.Name
+                                        @product.Name
+                                    </td>
+                                    <td style="color:green;">
+                                        @product.SalePrice$
                                     </td>
                                     <td>
-                                        @slide.Order
-                                    </td>
-                                    <td>
-                                        <a asp-controller="slide" asp-action="update" asp-route-id="@slide.Id" class="btn btn-warning btn-info"><i class="mdi mdi-pencil"></i></a>
-                                        <a asp-controller="slide" asp-action="delete" asp-route-id="@slide.Id" class="btn btn-danger btn-info"><i class="mdi mdi-delete"></i></a>
-                                        <a asp-controller="slide" asp-action="details" asp-route-id="@slide.Id" class="btn btn-primary btn-info"><i class="mdi mdi-open-in-new"></i></a>
+                                        <a asp-controller="product" asp-action="update" asp-route-id="@product.Id" class="btn btn-warning btn-info"><i class="mdi mdi-pencil"></i></a>
+                                        <a asp-controller="product" asp-action="delete" asp-route-id="@product.Id" class="btn btn-danger btn-info"><i class="mdi mdi-delete"></i></a>
+                                        <a asp-controller="product" asp-action="details" asp-route-id="@product.Id" class="btn btn-primary btn-info"><i class="mdi mdi-open-in-new"></i></a>
                                     </td>
                                 </tr>
                             }
@@ -65,20 +64,20 @@
                 <nav aria-label="Page navigation example" class="d-flex justify-content-center mt-3">
                     <ul class="pagination">
                         <li class="page-item @(Model.CurrentPage == 1 ? "disabled" : null)">
-                            <a class="page-link" asp-controller="slide" asp-action="index" asp-route-page="@(Model.CurrentPage-1)" aria-label="Previous">
+                            <a class="page-link" asp-controller="product" asp-action="index" asp-route-page="@(Model.CurrentPage-1)" aria-label="Previous">
                                 <span aria-hidden="true">&laquo;</span>
                                 <span class="sr-only">Previous</span>
                             </a>
                         </li>
-                        @for (int  i = 1;  i <= Model.TotalPages;  i++)
+                        @for (int i = 1; i <= Model.TotalPages; i++)
                         {
                             <li class="page-item @(Model.CurrentPage == i ? "active" : null)">
-                                <a class="page-link" asp-controller="slide" asp-action="index" asp-route-page="@i">@i</a>
+                                <a class="page-link" asp-controller="product" asp-action="index" asp-route-page="@i">@i</a>
                             </li>
-                            
+
                         }
                         <li class="page-item @(Model.TotalPages <= Model.CurrentPage ? "disabled" : "")">
-                            <a class="page-link" asp-controller="slide" asp-action="index" asp-route-page="@(Model.CurrentPage+1)" aria-label="Next">
+                            <a class="page-link" asp-controller="product" asp-action="index" asp-route-page="@(Model.CurrentPage+1)" aria-label="Next">
                                 <span aria-hidden="true">&raquo;</span>
                                 <span class="sr-only">Next</span>
                             </a>
