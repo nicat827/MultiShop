@@ -1,4 +1,4 @@
-﻿namespace MultiShop.Entities.Base
+﻿namespace MultiShop.Entities
 {
     public class BaseEntity
     {
