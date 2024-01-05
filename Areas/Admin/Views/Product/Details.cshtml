@@ -1,29 +1,42 @@
 ﻿@model ProductGetVM
 <div class="row justify-content-center">
-        <h1><b class="text-danger">#@Model.Id</b>  @Model.Name</h1>
-    <div>
-        <img style="position:relative;border-radius:4px;width:100px;height:100px;margin-right:10px;" src="~/uploads/product/main/@Model.Images.FirstOrDefault(i => i.Type==ImageType.Main).ImageUrl" />
-        <span style="width:100%;height:100%;position:absolute;left:50%;top:50%;letter-spacing:1.5px">Main</span>
+    <h1><b class="text-danger">#@Model.Id</b>  @Model.Name</h1>
+    <h2><b class="text-danger">SKU:</b>  @Model.SKU</h2>
+    <h2><b class="text-danger">Cost Price:</b>  @Model.CostPrice$</h2>
+    <h2><b class="text-danger">Sale Price:</b>  @Model.SalePrice$</h2>
+    <h2><b class="text-danger">Category:</b>  @Model.Category.Name</h2>
+    <div class="d-flex" style="position:relative;width:auto">
+        <img style="border-radius:4px;width:100px;height:100px;margin-right:10px;" src="~/uploads/product/main/@Model.Images.FirstOrDefault(i => i.Type==ImageType.Main).ImageUrl" />
+        <span style="color:white;position:absolute;left:50%;top:50%;letter-spacing:1.5px; transform:translate(-50%,-50%)">Main</span>
     </div>
-    <div style="position:absolute;">
-            <img style="border-radius:4px;width:100px;height:100px;margin-right:10px;" src="~/uploads/product/main/@Model.Images.FirstOrDefault(i => i.Type==ImageType.Hover).ImageUrl" />
-        <span style="width:100%;height:100%;position:relative;left:50%;top:50%;letter-spacing:1.5px">Hover</span>
-        </div>
-        @foreach(var img in Model.Images.Where(i => i.Type == ImageType.Other).ToList())
+    <div class="d-flex" style="position:relative;width:auto">
+        <img style="border-radius:4px;width:100px;height:100px;margin-right:10px;" src="~/uploads/product/hover/@Model.Images.FirstOrDefault(i => i.Type==ImageType.Hover).ImageUrl" />
+        <span style="color:white;position:absolute;left:50%;top:50%;letter-spacing:1.5px; transform:translate(-50%,-50%)">Hover</span>
+    </div>
+    <div>
+        @foreach (var img in Model.Images.Where(i => i.Type == ImageType.Other).ToList())
         {
-            <div style="position:relative;">
-                <img style="border-radius:4px;width:100px;height:100px;margin-right:10px;" src="~/uploads/product/main/@img.ImageUrl)" />
-                <span style="width:100%;height:100%;position:absolute;left:50%;top:50%;letter-spacing:1.5px">Other</span>
+            <div class="d-flex" style="position:relative;width:auto">
+                <img style="border-radius:4px;width:100px;height:100px;margin-right:10px;" src="~/uploads/product/other/@img.ImageUrl" />
+                <span style="color:white;position:absolute;left:50%;top:50%;letter-spacing:1.5px; transform:translate(-50%,-50%)">Other</span>
             </div>
-            
+
         }
         <h4 style="text-align:center;font-style:italic;">Created at @(Model.CreatedAt)</h4>
         @if (Model.LastUpdatedAt is not null)
         {
             <h4 style="text-align:center;font-style:italic;">Updated at @(Model.LastUpdatedAt)</h4>
         }
+    </div>
+     
   <hr/> 
-
+    @if(Model.Description is not null)
+    {
+      <p>
+          @Model.Description
+      </p>
+        
+    }
     @if (Model.RelatedProducts.Count > 0)
     {
         <div class="product-item-wrap row">
