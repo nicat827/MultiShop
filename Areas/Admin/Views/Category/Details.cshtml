@@ -1,0 +1,38 @@
+﻿@model Category
+<div class="row justify-content-center">
+        <h1><b class="text-danger">#@Model.Id</b>  @Model.Name</h1>
+        <img style="border-radius:4px;max-width:400px;max-height:190px;margin-bottom:10px" src="~/uploads/category/@Model.ImageUrl" />
+        <h4 style="text-align:center;font-style:italic;">Created at @(Model.CreatedAt)</h4>
+        @if (Model.LastUpdatedAt is not null)
+        {
+            <h4 style="text-align:center;font-style:italic;">Updated at @(Model.LastUpdatedAt)</h4>
+        }
+  <hr/> 
+
+    @if (Model.Products.Count > 0)
+    {
+        <div class="product-item-wrap row">
+            @foreach (Product product in Model.Products)
+            {
+                <div class="card m-3" style="width: 14rem;padding:0">
+                    <img class="card-img-top w-100" src="~/uploads/product/main/@product.Images[0].ImageUrl" alt="Product Image">
+                    <div class="card-body">
+                        <h5 class="card-title">@product.Name</h5>
+                        <p class="card-text">Cost Price:<b class="text-success">@(product.CostPrice)$</b></p>
+                        <p class="card-text">Sale Price:<b class="text-success">@(product.SalePrice)$</b></p>
+                        <a class="btn btn-primary" asp-controller="product" asp-action="update" asp-route-id="@product.Id">Update</a>
+                    </div>
+                </div>
+
+            }
+        </div>
+
+    }
+
+    else
+    {
+        <h1 class="text-danger" style="text-align:center;">Products wasnt defined!</h1>
+    }
+
+
+</div>

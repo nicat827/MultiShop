@@ -123,7 +123,17 @@ namespace MultiShop.Areas.Admin.Controllers
             await _context.SaveChangesAsync();
             return RedirectToAction(nameof(Index));
         }
+        public async Task<IActionResult> Details(int id)
+        {
+            id.CheckPositiveNum();
+            Category cat = await _context.Categories
+                .Include(c => c.Products).ThenInclude(p => p.Images
+                .Where(i => i.Type == ImageType.Main))
+                .FirstOrDefaultAsync(c => c.Id == id);
 
+            cat.CheckNull();
+            return View(cat);
+        }
         public async Task<IActionResult> Delete(int id)
         {
             id.CheckPositiveNum();

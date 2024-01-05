@@ -180,14 +180,20 @@ namespace MultiShop.Areas.Admin.Controllers
 
         public async Task<IActionResult> Details(int id)
         {
-            if (id <= 0) return BadRequest();
+            id.CheckPositiveNum();
             Product product = await _context.Products
                 .Include(p => p.Images)
                 .Include(p => p.Category)
                 .Include(p => p.ProductColors).ThenInclude(pc => pc.Color)
-                .FirstOrDefaultAsync(p => p.Id == id);
-
-            return View(product);
+                .FirstOrDefaultAsync(p => p.Id == id && p.IsDeleted == false);
+            ProductGetVM vm = _mapper.Map<ProductGetVM>(product);
+            vm.Colors = product.ProductColors.Select(pc => pc.Color).ToList();
+            vm.RelatedProducts = await _context.Products
+                .Include(p => p.Category)
+                .Include(p => p.Images.Where(i => i.Type == ImageType.Main))
+                .Where(p => p.CategoryId == product.CategoryId && p.IsDeleted == false)
+                .ToListAsync();
+            return View(vm);
         }
 
         public async Task<IActionResult> Delete(int id)
@@ -238,6 +244,7 @@ namespace MultiShop.Areas.Admin.Controllers
             productVM.Colors = await GetColorsAsync();
             productVM.Categories = await GetCategoriesAsync();
             productVM.Images = productVM.Images;
+            productVM.ColorIds = product.ProductColors.Select(pc => pc.ColorId).ToList();
             return View(productVM);
         }
 
@@ -350,7 +357,7 @@ namespace MultiShop.Areas.Admin.Controllers
                     }
                     if (!product.ProductColors.Exists(pc => pc.ColorId == colorId)) product.ProductColors.Add(new ProductColor { ColorId = colorId });
                 }
-                product.ProductColors = product.ProductColors.Where(pc => !productVM.ColorIds.Exists(id => id == pc.ColorId)).ToList();
+                product.ProductColors = product.ProductColors.Where(pc => productVM.ColorIds.Exists(id => id == pc.ColorId)).ToList();
 
             }
             if (productVM.ImageIds is not null)

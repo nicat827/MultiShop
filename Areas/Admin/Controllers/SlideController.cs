@@ -40,6 +40,14 @@ namespace MultiShop.Areas.Admin.Controllers
             };
             return View(pagVM);
         }
+
+        public async Task<IActionResult> Details(int id)
+        {
+            id.CheckPositiveNum();
+            Slide slide = await _context.Slides.FirstOrDefaultAsync(s => s.Id == id && s.IsDeleted == false);
+            slide.CheckNull();
+            return View(slide);
+        }
         public async Task<IActionResult> Create()
         {
             return View();

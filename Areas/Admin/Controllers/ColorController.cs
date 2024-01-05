@@ -40,6 +40,16 @@ namespace MultiShop.Areas.Admin.Controllers
             };
             return View(pagVM);
         }
+
+        public async Task<IActionResult> Details(int id)
+        {
+            id.CheckPositiveNum();
+            Color color = await _context.Colors
+                .Include(c => c.ProductColors).ThenInclude(pc => pc.Product).ThenInclude(pc => pc.Images.Where(pi => pi.Type == ImageType.Main))
+                .FirstOrDefaultAsync(c => c.Id == id && c.IsDeleted == false);
+            color.CheckNull();
+            return View(color);
+        }
         public async Task<IActionResult> Create()
         {
             return View();
