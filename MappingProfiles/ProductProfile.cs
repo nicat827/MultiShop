@@ -8,6 +8,7 @@ namespace MultiShop.MappingProfiles
         {
             CreateMap<Product, ProductGetItemVM>();
             CreateMap<ProductCreateVM, Product>();
+            CreateMap<ProductUpdateVM, Product>().ReverseMap();
         }
     }
 }

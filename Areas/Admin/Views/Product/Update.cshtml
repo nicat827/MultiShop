@@ -1,0 +1,98 @@
+﻿@model ProductUpdateVM
+
+<div class="row justify-content-center">
+    <div class="col-md-10 grid-margin stretch-card">
+        <div class="card">
+            <div class="card-body" >
+                <h4 class="card-title">Update Product:</h4>
+
+                <form class="forms-sample" method="post" enctype="multipart/form-data">
+                    <div class="form-group">
+                        <label style="display:block" asp-for="MainPhoto">Main Photo:</label>
+                        <img style="width:160px; height:160px; border-radius:10px" src="~/uploads/product/main/@Model.Images.FirstOrDefault(i => i.Type == ImageType.Main)?.ImageUrl" />
+                    </div>
+                    <div class="form-group">
+                        <input asp-for="MainPhoto" class="form-control">
+                        <span class="text-danger" asp-validation-for="MainPhoto"></span>
+                    </div>
+                    <div class="form-group">
+                        <label style="display:block" asp-for="HoverPhoto">Hover Photo:</label>
+                        <img style="width:160px; height:160px; border-radius:10px" src="~/uploads/product/hover/@Model.Images.FirstOrDefault(i => i.Type == ImageType.Hover)?.ImageUrl" />
+                    </div>
+                    <div class="form-group">
+                        <input asp-for="HoverPhoto" class="form-control">
+                        <span class="text-danger" asp-validation-for="HoverPhoto"></span>
+                    </div>
+                    <div class="form-group">
+
+                        <label style="display:block" asp-for="OtherPhotos">Other Photos:</label>
+                    </div>
+                    <div class="form-group d-flex">
+                        @foreach (ProductImage image in Model.Images.Where(pi => pi.Type == ImageType.Other))
+                        {
+                            <div >
+                                <div style="position:relative;">
+                                    <img style="width:140px;height:140px;border-radius:10px;margin:10px" src="~/uploads/product/other/@image.ImageUrl" />
+                                    <button style="position:absolute; right:10px; top:10px;border-radius:0px 10px 0px 10px;" type="button" class="cus-delete-btn btn btn-danger">X</button>
+                                </div>
+                                <input asp-for="ImageIds" type="hidden" value="@image.Id">
+                            </div>
+                        }
+                    </div>
+                    <div class="form-group">
+                        <input asp-for="OtherPhotos" class="form-control">
+                        <span class="text-danger" asp-validation-for="OtherPhotos"></span>
+                    </div>
+                    <div class="form-group">
+                        <label asp-for="Name">Name:</label>
+                        <input asp-for="Name" class="form-control" placeholder="Name">
+                        <span class="text-danger" asp-validation-for="Name"></span>
+                    </div>
+                    <div class="form-group">
+                        <label asp-for="Description">Description:</label>
+                        <input asp-for="Description" class="form-control" placeholder="Description">
+                        <span class="text-danger" asp-validation-for="Description"></span>
+                    </div>
+                    <div class="form-group">
+                        <label asp-for="CategoryId">Category:</label>
+                        <select asp-for="CategoryId" asp-items="new SelectList(Model.Categories, nameof(Category.Id), nameof(Category.Name))">
+                            <option disabled selected>Chooce category!</option>
+                        </select>
+                        <span class="text-danger" asp-validation-for="CategoryId"></span>
+                    </div>
+                    <div class="form-group">
+                        <label asp-for="ColorIds">Colors:</label>
+                        <select asp-for="ColorIds" asp-items="new SelectList(Model.Colors, nameof(Color.Id), nameof(Color.Name))">
+                        </select>
+                        <span class="text-danger" asp-validation-for="ColorIds"></span>
+                    </div>
+                    <div class="form-group">
+                        <label asp-for="CostPrice">Cost Price:</label>
+                        <input asp-for="CostPrice" class="form-control" placeholder="Cost Price">
+                        <span class="text-danger" asp-validation-for="CostPrice"></span>
+                    </div>
+                    <div class="form-group">
+                        <label asp-for="SalePrice">Sale Price:</label>
+                        <input asp-for="SalePrice" class="form-control" placeholder="Sale Price">
+                        <span class="text-danger" asp-validation-for="SalePrice"></span>
+                    </div>
+                    <button type="submit" class="btn btn-primary me-2">Update</button>
+                    <button asp-controller="category" asp-action="index" class="btn btn-light">Cancel</button>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+
+    const deleteBtns = document.querySelectorAll(".cus-delete-btn")
+
+    if (deleteBtns) {
+        deleteBtns.forEach(btn => {
+            btn.addEventListener("click", (e) => {
+                btn.parentElement.parentElement.remove();
+            })
+        })
+    }
+</script>
