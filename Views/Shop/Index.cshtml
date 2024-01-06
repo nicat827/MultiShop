@@ -25,7 +25,7 @@
                     <div class="custom-control custom-checkbox d-flex align-items-center justify-content-between mb-3">
                         <input type="checkbox" class="custom-control-input" checked id="color-all">
                         <label class="custom-control-label" for="price-all">All Colors</label>
-                        <span class="badge border font-weight-normal">@Model.Colors.Select(c => c.ProductColors).Sum(pc => pc.Count)</span>
+                        <span class="badge border font-weight-normal">@Model.Colors.Select(c => c.ProductColors).ToList().Sum(pc => pc.Count)</span>
                     </div>
                     @foreach (Color color in Model.Colors)
                     {
