@@ -14,9 +14,11 @@ namespace MultiShop.Areas.Admin.ViewModels
         [Range(1, 999999)]
         public decimal CostPrice { get; set; }
 
+        [Range(0, 999999)]
+        public decimal Discount { get; set; }
+       
         [Range(1, 999999)]
         public decimal SalePrice { get; set; }
-
         public string? Description { get; set; }
 
         // releation props

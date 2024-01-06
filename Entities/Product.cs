@@ -11,6 +11,9 @@ namespace MultiShop.Entities
         [Range(1, 999999)]
 
         public decimal SalePrice { get; set; }
+        [Range(0, 999999)]
+
+        public decimal Discount { get; set; }
 
         public string? Description { get; set; }
 

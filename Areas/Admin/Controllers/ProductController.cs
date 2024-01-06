@@ -398,6 +398,7 @@ namespace MultiShop.Areas.Admin.Controllers
 
             product.Name = productVM.Name;
             product.SalePrice = productVM.SalePrice;
+            product.Discount = productVM.Discount;
             product.CostPrice = productVM.CostPrice;
             product.Description = productVM.Description;
             product.SKU = productVM.Name.Substring(0, 3).ToUpper() + productVM.CostPrice.ToString();

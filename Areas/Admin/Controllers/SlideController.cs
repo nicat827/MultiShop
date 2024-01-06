@@ -65,9 +65,9 @@ namespace MultiShop.Areas.Admin.Controllers
                 return View(vm);
 
             }
-            if (!vm.Photo.CheckFileSize(500))
+            if (!vm.Photo.CheckFileSize(1000))
             {
-                ModelState.AddModelError("Photo", "Invalid size of photo (longer than 500Kb)!");
+                ModelState.AddModelError("Photo", "Invalid size of photo (longer than 1000Kb)!");
                 return View(vm);
 
             }
@@ -122,9 +122,9 @@ namespace MultiShop.Areas.Admin.Controllers
                     return View(vm);
 
                 }
-                if (!vm.Photo.CheckFileSize(500))
+                if (!vm.Photo.CheckFileSize(1000))
                 {
-                    ModelState.AddModelError("Photo", "Invalid size of photo (longer than 500Kb)!");
+                    ModelState.AddModelError("Photo", "Invalid size of photo (longer than 1000Kb)!");
                     return View(vm);
 
                 }
