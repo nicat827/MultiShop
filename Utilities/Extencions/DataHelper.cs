@@ -12,7 +12,7 @@
         }
         public static void CheckNull<T>(this T entity)
         {
-            if (entity is null) throw new Exception($"{nameof(T)} doesn't exist!");
+            if (entity is null) throw new NotFoundException($"{nameof(T)} doesn't exist!");
         }
     }
 }

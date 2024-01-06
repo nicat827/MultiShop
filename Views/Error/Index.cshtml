@@ -1,0 +1,57 @@
+﻿@model ErrorVM
+@{
+    Layout = null;
+ }
+
+<div class="back">
+    <h1>@Model.Code</h1>
+    <h2>@Model.Message</h2>
+    <a asp-controller="home" asp-action="index">Home</a>
+</div>
+<style>
+    body {
+        margin:0;
+        padding:0;
+    }
+    a {
+        text-decoration:none;
+        outline:none;
+        padding:5px 10px;
+        width:60px;
+        letter-spacing: 1.5px;
+        letter-spacing:1.5px;
+        height: 40px;
+        display:flex;
+        justify-content:center;
+        align-items:center;
+        border:2px solid white;
+        border-radius:6px;
+        color:white;
+        background-color:rgba(0,0,0,0)
+    }
+    h1 {
+        font-size:100px;
+        font-weight:1000;
+        letter-spacing: 1.5px;
+    }
+    h2 {
+        font-size:60px;
+        font-weight:800;
+        letter-spacing:1.5px;
+    }
+    .back {
+        width:100%;
+        height:100%;
+        display:flex;
+        justify-content:center;
+        align-items:center;
+        flex-direction:column;
+        color:white;
+        font-family:monospace;
+        background-image: url(../uploads/error/cosmos.jpg);
+        
+
+
+    }
+
+</style>

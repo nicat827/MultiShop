@@ -1,5 +1,6 @@
 using Microsoft.EntityFrameworkCore;
 using MultiShop.DAL;
+using MultiShop.Middlewares;
 using MultiShop.Services;
 using System.Reflection;
 
@@ -19,7 +20,7 @@ app.UseStaticFiles();
 app.UseRouting();
 
 app.UseAuthorization();
-
+app.UseMiddleware<GlobalExceptionHandlerMiddleware>();
 app.MapControllerRoute(
     name: "admin",
     pattern: "{area:exists}/{controller=Dashboard}/{action=Index}/{id?}");
