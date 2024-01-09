@@ -34,6 +34,8 @@
 </head>
 
 <body>
+   
+
     <!-- Topbar Start -->
     <div class="container-fluid">
         <div class="row bg-secondary py-1 px-xl-5">
@@ -47,11 +49,26 @@
             </div>
             <div class="col-lg-6 text-center text-lg-right">
                 <div class="d-inline-flex align-items-center">
+                    @if (User.Identity.IsAuthenticated &&  !User.IsInRole(UserRole.Member.ToString()))
+                    {
+                    <button class="btn btn-primary" asp-area="admin" asp-controller="dashboard" asp-action="index">Admin Panel</button>
+                        
+                    }
                     <div class="btn-group">
                         <button type="button" class="btn btn-sm btn-light dropdown-toggle" data-toggle="dropdown">My Account</button>
                         <div class="dropdown-menu dropdown-menu-right">
-                            <button class="dropdown-item" type="button">Sign in</button>
-                            <button class="dropdown-item" type="button">Sign up</button>
+                            @if (User.Identity.IsAuthenticated)
+                            {
+                                <a class="dropdown-item" type="button" asp-controller="user" asp-action="profile">@User.Identity.Name.ToUpper()</a>
+                                <a class="dropdown-item" type="button" asp-controller="user" asp-action="logout">Logout</a>
+
+                            } 
+                            else
+                            {
+                                <a class="dropdown-item" type="button" asp-controller="user" asp-action="register" asp-route-returnUrl="@Context.Request.Path.Value">Register</a>
+                                <a class="dropdown-item" type="button" asp-controller="user" asp-action="login" asp-route-returnUrl="@Context.Request.Path.Value">Login</a>
+                                
+                            }
                         </div>
                     </div>
                     <div class="btn-group mx-2">

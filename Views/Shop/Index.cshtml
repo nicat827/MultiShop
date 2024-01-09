@@ -1,4 +1,5 @@
 ﻿@model ShopVM
+
 <!-- Breadcrumb Start -->
 <div class="container-fluid">
     <div class="row px-xl-5">
@@ -105,10 +106,10 @@
                         <div class="text-center py-4">
                             <a class="h6 text-decoration-none text-truncate" href="">@product.Name</a>
                             <div class="d-flex align-items-center justify-content-center mt-2">
-                                    <h5>$@product.SalePrice</h5>
+                                    <h5>$@(product.SalePrice - product.Discount)</h5>
                                     @if (product.Discount > 0)
                                     {
-                                        <h6 class="text-muted ml-2"><del>$@(product.SalePrice - product.Discount)</del></h6>
+                                        <h6 class="text-muted ml-2"><del>$@product.SalePrice</del></h6>
 
                                     }
                             </div>
