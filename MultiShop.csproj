@@ -16,6 +16,7 @@
       <PrivateAssets>all</PrivateAssets>
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
     </PackageReference>
+    <PackageReference Include="Newtonsoft.Json" Version="13.0.3" />
   </ItemGroup>
 
   <ItemGroup>
@@ -24,6 +25,7 @@
     <Folder Include="wwwroot\uploads\product\hover\" />
     <Folder Include="wwwroot\uploads\product\other\" />
     <Folder Include="wwwroot\uploads\slide\" />
+    <Folder Include="Models\" />
   </ItemGroup>
 
 </Project>

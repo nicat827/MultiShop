@@ -97,7 +97,7 @@
                                 <img class="img-fluid w-100" style="height:250px; width:100%;" src="~/uploads/product/main/@product.Images.Find(pi => pi.Type == ImageType.Main).ImageUrl" alt="">
                             <div class="product-action">
                                 <a class="btn btn-primary text-white" asp-controller="shop" asp-action="details" asp-route-id="@product.Id">Show</a>
-                                <a class="btn btn-outline-dark btn-square" href=""><i class="fa fa-shopping-cart"></i></a>
+                                    <a class="btn btn-outline-dark btn-square" asp-controller="cart" asp-action="add" asp-route-id="@product.Id" asp-route-returnUrl="@Context.Request.Path.Value"><i class="fa fa-shopping-cart"></i></a>
                                 <a class="btn btn-outline-dark btn-square" href=""><i class="far fa-heart"></i></a>
                                 <a class="btn btn-outline-dark btn-square" href=""><i class="fa fa-sync-alt"></i></a>
                                 <a class="btn btn-outline-dark btn-square" href=""><i class="fa fa-search"></i></a>

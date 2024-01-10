@@ -82,7 +82,7 @@
         @foreach (Category category in Model.Categories)
         {
         <div class="col-lg-3 col-md-4 col-sm-6 pb-1">
-            <a class="text-decoration-none" href="">
+            <a class="text-decoration-none" asp-controller="shop" asp-action="index" asp-route-catId="@category.Id">
                 <div class="cat-item d-flex align-items-center mb-4">
                     <div class="overflow-hidden" style="width: 100px; height: 100px;">
                         <img class="img-fluid" src="~/uploads/category/@category.ImageUrl" alt="">
@@ -111,7 +111,7 @@
                         <img class="img-fluid w-100;" style="height:250px; width:100%;" src="~/uploads/product/main/@product.Images.Find(i => i.Type == ImageType.Main).ImageUrl" alt="">
                     <div class="product-action">
                         <a class="btn btn-primary text-white" asp-controller="shop" asp-action="details" asp-route-id="@product.Id">Show</a>
-                        <a class="btn btn-outline-dark btn-square" href=""><i class="fa fa-shopping-cart"></i></a>
+                        <a class="btn btn-outline-dark btn-square" asp-controller="cart" asp-action="add" asp-route-id="@product.Id" asp-route-returnUrl="@Context.Request.Path.Value"><i class="fa fa-shopping-cart"></i></a>
                         <a class="btn btn-outline-dark btn-square" href=""><i class="far fa-heart"></i></a>
                         <a class="btn btn-outline-dark btn-square"  href=""><i class="fa fa-search"></i></a>
                         <br>
@@ -174,7 +174,7 @@
                     <div class="product-img position-relative overflow-hidden">
                         <img class="img-fluid w-100;" style="height:250px; width:100%;" src="~/uploads/product/main/@product.Images.Find(i => i.Type == ImageType.Main).ImageUrl" alt="">
                         <div class="product-action">
-                            <a class="btn btn-outline-dark btn-square" href=""><i class="fa fa-shopping-cart"></i></a>
+                            <a class="btn btn-outline-dark btn-square" asp-controller="cart" asp-action="add" asp-route-id="@product.Id" asp-route-returnUrl="@Context.Request.Path.Value"><i class="fa fa-shopping-cart"></i></a>
                             <a class="btn btn-outline-dark btn-square" href=""><i class="far fa-heart"></i></a>
                             <a class="btn btn-outline-dark btn-square" href=""><i class="fa fa-sync-alt"></i></a>
                             <a class="btn btn-outline-dark btn-square" href=""><i class="fa fa-search"></i></a>

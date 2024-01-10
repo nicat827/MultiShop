@@ -33,12 +33,7 @@ namespace MultiShop.Controllers
             {
                 return View(vm);
             }
-            Regex regex = new Regex("^[\\w-\\.]+@([\\w-]+\\.)+[\\w-]{2,4}$");
-            if (!regex.IsMatch(vm.Email))
-            {
-                ModelState.AddModelError("Email", "Email is incorrect!");
-                return View(vm);
-            }
+           
             if (await _userManager.Users.AnyAsync(u => u.UserName == vm.UserName))
             {
                 ModelState.AddModelError("UserName", "User with this username already exists!");
@@ -115,6 +110,13 @@ namespace MultiShop.Controllers
             }
             return RedirectToAction("Index", "Home");
 
+        }
+
+        public async Task<IActionResult> Logout(string? returnUrl = null)
+        {
+            await _signInManager.SignOutAsync();
+            if (returnUrl is not null) return Redirect(returnUrl);
+            return RedirectToAction("Index", "Home");
         }
 
     }
