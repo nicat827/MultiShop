@@ -15,6 +15,8 @@ namespace MultiShop.DAL
         public DbSet<Slide> Slides { get; set; }
         public DbSet<Settings> Settings { get; set; }
         public DbSet<ProductImage> ProductImages { get; set; }
+        public DbSet<Order> Orders { get; set; }
+        public DbSet<OrderItem> OrderItems { get; set; }
         public DbSet<ProductColor> ProductColors { get; set; }
         public DbSet<BasketItem> BasketItems { get; set; }
 

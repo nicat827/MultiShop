@@ -1,20 +1,33 @@
 ﻿using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using MultiShop.DAL;
+using MultiShop.Services;
 using MultiShop.Utilities.Extencions;
+using MultiShop.ViewModels.Cookies;
+using Newtonsoft.Json;
 using System.Text;
 using System.Text.RegularExpressions;
 
 namespace MultiShop.Controllers
 {
-    public class UserController:Controller
+    public class AccountController:Controller
     {
+        private readonly AppDbContext _context;
+        private readonly EmailService _emailService;
         private readonly UserManager<AppUser> _userManager;
         private readonly RoleManager<IdentityRole> _roleManager;
         private readonly SignInManager<AppUser> _signInManager;
 
-        public UserController(UserManager<AppUser> userManager, RoleManager<IdentityRole> roleManager, SignInManager<AppUser> signInManager)
+        public AccountController(
+            AppDbContext context,
+            EmailService emailService,
+            UserManager<AppUser> userManager,
+            RoleManager<IdentityRole> roleManager,
+            SignInManager<AppUser> signInManager)
         {
+            _context = context;
+            _emailService = emailService;
             _userManager = userManager;
             _roleManager = roleManager;
             _signInManager = signInManager;
@@ -26,7 +39,7 @@ namespace MultiShop.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> Register(RegisterVM vm, string? returnUrl=null)
+        public async Task<IActionResult> Register(RegisterVM vm)
         {
             if (User.Identity.IsAuthenticated) return NotFound();
             if (!ModelState.IsValid)
@@ -62,13 +75,46 @@ namespace MultiShop.Controllers
                 }
                 return View(string.Empty, sb.ToString());
             }
+
             await _userManager.AddToRoleAsync(newUser, UserRole.Member.ToString());
-            await _signInManager.SignInAsync(newUser, isPersistent: false);
-            if (returnUrl is not null)
+            string emailToken = await _userManager.GenerateEmailConfirmationTokenAsync(newUser);
+            string action = Url.Action(nameof(Confirm), "Account", new { Token = emailToken, Email = newUser.Email }, Request.Scheme);
+            string body = $"<a style='height:50px; background-color:black;color:white;border:1px solid white; border-radius:8px; text-decoration:none; font-weight:700;padding:10px;font-size:24px;' href={action}>Confirm Email</a>";
+            await _emailService.SendEmailAsync(body, "Confirm your account :)", newUser.Email);
+            ViewBag.ConfirmModal = true;
+            return View();   
+        }
+
+        public async Task<IActionResult> Confirm(string token, string email)
+        {
+            AppUser user = await _userManager.FindByEmailAsync(email);
+            user.CheckNull();
+            var res = await _userManager.ConfirmEmailAsync(user, token);
+            if (!res.Succeeded)
             {
-                return Redirect(returnUrl);
+                StringBuilder sb = new StringBuilder();
+                foreach (var err in res.Errors)
+                {
+                    sb.AppendLine(err.Description);
+                }
+                throw new Exception(sb.ToString());
             }
+            if (Request.Cookies["Basket"] is not null)
+            {
+                ICollection<CookiesBasketVM> basket = JsonConvert.DeserializeObject<ICollection<CookiesBasketVM>>(Request.Cookies["Basket"]);
+                foreach (var item in basket)
+                {
+                    if(await _context.Products.AnyAsync(p => p.Id == item.Id && p.IsDeleted == false)) 
+                        user.BasketItems.Add(new BasketItem { ProductId = item.Id, Count = item.Count });
+                }
+                Response.Cookies.Delete("Basket");
+                await _context.SaveChangesAsync();
+            }
+            await _signInManager.SignInAsync(user, isPersistent: false);
+            TempData["Confirmed"] = true;
             return RedirectToAction("Index", "Home");
+
+
         }
 
         public ActionResult Login()

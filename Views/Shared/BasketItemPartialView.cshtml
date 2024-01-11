@@ -1,0 +1,29 @@
+﻿@model ICollection<BasketItemVM>
+
+@foreach (BasketItemVM item in Model)
+{
+    <tr>
+        <td class="align-middle">
+            <img src="~/uploads/product/main/@item.ImageUrl" alt="" style="width: 50px;height:50px;margin-right:10px;">
+            @item.Name
+        </td>
+        <td class="align-middle">$@item.Price</td>
+        <td class="align-middle">
+            <div class="input-group quantity mx-auto" style="width: 100px;">
+                <div class="input-group-btn">
+                    <a asp-controller="cart" asp-action="remove" asp-route-id="@item.Id" asp-route-all="@false" class="btn btn-sm btn-primary btn-minus">
+                        <i class="fa fa-minus"></i>
+                    </a>
+                </div>
+                <input type="text" class="form-control form-control-sm bg-secondary border-0 text-center" value="@item.Count">
+                <div class="input-group-btn">
+                    <a asp-controller="cart" asp-action="add" asp-route-id="@item.Id" id="cust-add-btn" class="btn btn-sm btn-primary btn-plus">
+                        <i class="fa fa-plus"></i>
+                    </a>
+                </div>
+            </div>
+        </td>
+        <td class="align-middle">$@item.Subtotal</td>
+        <td class="align-middle"><a class="btn btn-sm btn-danger" asp-controller="cart" asp-action="remove" asp-route-id="@item.Id"><i class="fa fa-times"></i></a></td>
+    </tr>
+}

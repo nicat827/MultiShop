@@ -4,6 +4,7 @@ using Microsoft.EntityFrameworkCore;
 using MultiShop.DAL;
 using MultiShop.Entities;
 using MultiShop.Utilities.Extencions;
+using MultiShop.ViewModels;
 using MultiShop.ViewModels.Cookies;
 using Newtonsoft.Json;
 using System.Security.Claims;
@@ -74,11 +75,12 @@ namespace MultiShop.Controllers
         }
 
 
-        public async Task<IActionResult> Add(int id, string? returnUrl= null)
+        public async Task<IActionResult> Add(int id, int count = 1, string? returnUrl= null)
         {
             id.CheckPositiveNum();
             Product? product = await _context.Products.Where(p => p.IsDeleted == false && p.Id == id).FirstOrDefaultAsync();
             product.CheckNull();
+            ICollection<BasketItemVM> basketItemsVM = new List<BasketItemVM>();
             if (!User.Identity.IsAuthenticated)
             {
                 ICollection<CookiesBasketVM> currentBasket = new List<CookiesBasketVM>();
@@ -87,26 +89,59 @@ namespace MultiShop.Controllers
                     currentBasket = JsonConvert.DeserializeObject<ICollection<CookiesBasketVM>>(Request.Cookies["Basket"]);
                     CookiesBasketVM? findedItem = currentBasket.FirstOrDefault(i => i.Id == id);
                     if (findedItem is null) currentBasket.Add(new CookiesBasketVM { Id = id, Count = 1 });
-                    else findedItem.Count++;
+                    else findedItem.Count += count;
                 } 
                 else
                 {
                     currentBasket.Add(new CookiesBasketVM { Count = 1, Id = id });
                 }
                 Response.Cookies.Append("Basket", JsonConvert.SerializeObject(currentBasket));
+                //foreach (var item in currentBasket)
+                //{
+                //    Product? existed = await _context.Products
+                //        .Where(p => p.IsDeleted == false && p.Id == item.Id)
+                //        .Include(p => p.Images.Where(pi => pi.Type == ImageType.Main))
+                //        .FirstOrDefaultAsync();
+                //    if (existed is not null) basketItemsVM.Add(new BasketItemVM
+                //    {
+                //        Id = existed.Id,
+                //        Name = existed.Name,
+                //        ImageUrl = existed.Images[0].ImageUrl,
+                //        Price = existed.SalePrice,
+                //        Count = item.Count,
+                //        Subtotal = existed.SalePrice * item.Count
+
+                //    });
+
+                //}
+
             }
             else
             {
                 AppUser? user = await _userManager.Users
-                    .Include(u => u.BasketItems).ThenInclude(bi => bi.Product)
+                    .Include(u => u.BasketItems).ThenInclude(bi => bi.Product).ThenInclude(p => p.Images.Where(pi => pi.Type == ImageType.Main))
                     .FirstOrDefaultAsync(u => u.Id == User.FindFirstValue(ClaimTypes.NameIdentifier));
                 user.CheckNull();
                 BasketItem? findedItem = user.BasketItems.FirstOrDefault(bi => bi.ProductId == id);
                 if (findedItem is null) user.BasketItems.Add(new BasketItem { ProductId = id, Count = 1 });
-                else findedItem.Count++;
+                else findedItem.Count += count;
                 await _context.SaveChangesAsync();
-            }
 
+                //get with js
+                //foreach (BasketItem item in user.BasketItems)
+                //{
+                //    basketItemsVM.Add(new BasketItemVM
+                //    {
+                //        Id = item.ProductId,
+                //        Name = item.Product.Name,
+                //        ImageUrl = item.Product.Images[0].ImageUrl,
+                //        Price = item.Product.SalePrice,
+                //        Count = item.Count,
+                //        Subtotal = item.Product.SalePrice * item.Count
+
+                //    });
+                //}
+            }
 
             if (returnUrl is not null) return Redirect(returnUrl);
             return RedirectToAction(nameof(Index), "Cart");
